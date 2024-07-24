@@ -17,6 +17,12 @@ config :my_app, MyAppWeb.Endpoint,
   pubsub_server: MyApp.PubSub,
   live_view: [signing_salt: "pKG2Y+ZQ"]
 
+config :my_app, :phoenix_pubsub, name: MyApp.PubSub
+
+config :my_app,
+  my_app_node: System.get_env("MY_APP_NODE") || "my_app@127.0.0.1",
+  cookie: System.get_env("ERLANG_COOKIE") || "secret_cookie"
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

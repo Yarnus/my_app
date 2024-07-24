@@ -23,7 +23,10 @@ defmodule MyApp.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: MyApp.Supervisor]
-    Supervisor.start_link(children, opts)
+    result = Supervisor.start_link(children, opts)
+    # connect all nodes
+    connect_to_nodes()
+    result
   end
 
   # Tell Phoenix to update the endpoint configuration
@@ -32,5 +35,18 @@ defmodule MyApp.Application do
   def config_change(changed, _new, removed) do
     MyAppWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp connect_to_nodes do
+    ips = ["172.19.0.2", "172.19.0.3"]
+
+    Enum.each(ips, fn ip ->
+      node = :"my_app@#{ip}"
+
+      if node != Node.self() && !Node.connect(node) do
+        IO.inspect(Node.connect(node))
+        IO.puts("Unable to connect to node: #{node}")
+      end
+    end)
   end
 end

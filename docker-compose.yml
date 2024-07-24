@@ -7,6 +7,8 @@ services:
       - "4060:4060"
     environment:
       - PORT=4060
+      - MY_APP_NODE=my_app
+      - ERLANG_COOKIE=share_cookie
     networks:
       - phoenix_network
 
@@ -16,6 +18,8 @@ services:
       - "4070:4070"
     environment:
       - PORT=4070
+      - MY_APP_NODE=my_app2
+      - ERLANG_COOKIE=share_cookie
     networks:
       - phoenix_network
 

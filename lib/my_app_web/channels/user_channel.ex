@@ -2,7 +2,7 @@ defmodule MyAppWeb.UserChannel do
   require Logger
   use MyAppWeb, :channel
 
-  intercept(["spend"])
+  intercept(["tell_app"])
 
   @impl true
   def join("user:" <> id, payload, socket) do
@@ -33,16 +33,16 @@ defmodule MyAppWeb.UserChannel do
   end
 
   @impl true
-  def handle_out("spend", payload, socket) do
-    Logger.info(">>>>>>>>>>>>> sent spend via #{System.get_env("PORT")}")
-    push(socket, "spend", payload)
+  def handle_out("tell_app", payload, socket) do
+    Logger.info(">>>>>>>>>>>>> told app via #{System.get_env("PORT")}")
+    push(socket, "tell_app", payload)
     {:noreply, socket}
   end
 
-  def tell_app(id, params) do
-    result = MyAppWeb.Endpoint.broadcast("user:#{id}", "spend", params)
-    Logger.info("Tell APP spend:#{id} for: #{inspect(params)} from #{System.get_env("PORT")}")
-    result
+  @impl true
+  def handle_info({:tell_app, payload}, socket) do
+    handle_out("tell_app", payload, socket)
+    {:noreply, socket}
   end
 
   # Add authorization logic here as required.

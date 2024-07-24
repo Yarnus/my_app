@@ -24,6 +24,7 @@ defmodule MyAppWeb.Router do
     pipe_through [:browser, :api]
 
     get "/", TestController, :index
+    get "/list_nodes", TestController, :list_nodes
   end
 
   # Other scopes may use custom stacks.
