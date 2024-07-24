@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  phoenix1:
+    build: .
+    ports:
+      - "4060:4060"
+    environment:
+      - PORT=4060
+    networks:
+      - phoenix_network
+
+  phoenix2:
+    build: .
+    ports:
+      - "4070:4070"
+    environment:
+      - PORT=4070
+    networks:
+      - phoenix_network
+
+  nginx:
+    image: nginx
+    ports:
+      - "4080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - phoenix1
+      - phoenix2
+    networks:
+      - phoenix_network
+
+networks:
+  phoenix_network:
+    driver: bridge
